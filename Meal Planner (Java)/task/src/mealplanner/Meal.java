@@ -3,25 +3,25 @@ package mealplanner;
 import java.util.List;
 
 public class Meal {
-    private MealType type;
+    private String type;
     private String name;
     private List<String> ingredients;
 
     public Meal() {
-        this(MealType.BREAKFAST, "", List.of());
+        this("", "", List.of());
     }
 
-    public Meal(MealType type, String name, List<String> ingredients) {
+    public Meal(String type, String name, List<String> ingredients) {
         this.type = type;
         this.name = name;
         this.ingredients = ingredients;
     }
 
-    public MealType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(MealType type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -41,10 +41,10 @@ public class Meal {
         this.ingredients = ingredients;
     }
 
-    public  String createPrintRecord() {
+    public String createPrintRecord() {
         StringBuilder sb = new StringBuilder();
         sb
-                .append("Category: ").append(type.Capitalize()).append("\n")
+                .append("Category: ").append(type).append("\n")
                 .append("Name: ").append(name).append("\n")
                 .append("Ingredients: ").append("\n");
         ingredients.forEach(ingredient -> sb.append(ingredient).append("\n"));

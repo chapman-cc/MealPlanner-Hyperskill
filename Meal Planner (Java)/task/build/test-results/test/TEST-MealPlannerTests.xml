@@ -1,58 +1,151 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="MealPlannerTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-01-16T02:00:20" hostname="pop-os" time="0.117">
+<testsuite name="MealPlannerTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-01-16T03:44:38" hostname="pop-os" time="0.173">
   <properties/>
-  <testcase name="start" classname="MealPlannerTests" time="0.117"/>
+  <testcase name="start" classname="MealPlannerTests" time="0.173"/>
   <system-out><![CDATA[?[1;31m
 Start test 1?[0m
+What would you like to do (add, show, exit)? 
+> show
+No meals saved. Add a meal first.
+What would you like to do (add, show, exit)? 
+> new meal
+What would you like to do (add, show, exit)? 
+> meal
+What would you like to do (add, show, exit)? 
+> 
+What would you like to do (add, show, exit)? 
+>  	
+What would you like to do (add, show, exit)? 
+> add
 Which meal do you want to add (breakfast, lunch, dinner)? 
+> dessert
+Wrong meal category! Choose from: breakfast, lunch, dinner.
+> nothing
+Wrong meal category! Choose from: breakfast, lunch, dinner.
+> meal1
+Wrong meal category! Choose from: breakfast, lunch, dinner.
+> meal@
+Wrong meal category! Choose from: breakfast, lunch, dinner.
+> 
+Wrong meal category! Choose from: breakfast, lunch, dinner.
+>  	
+Wrong meal category! Choose from: breakfast, lunch, dinner.
 > lunch
 Input the meal's name: 
+> burger1
+Wrong format. Use letters only!
+> sushi@
+Wrong format. Use letters only!
+> 
+Wrong format. Use letters only!
+>  	
+Wrong format. Use letters only!
 > sushi
 Input the ingredients: 
+> salmon, rice1, avocado
+Wrong format. Use letters only!
+> salmon, , avocado
+Wrong format. Use letters only!
+> salmon,, avocado
+Wrong format. Use letters only!
+> salmon, rice, 
+Wrong format. Use letters only!
+> salmon, rice, avocado@
+Wrong format. Use letters only!
 > salmon, rice, avocado
-Category: LUNCH
+The meal has been added!
+What would you like to do (add, show, exit)? 
+> add
+Which meal do you want to add (breakfast, lunch, dinner)? 
+> breakfast
+Input the meal's name: 
+> banana oatmeal
+Input the ingredients: 
+> oats, milk, banana, peanut butter
+The meal has been added!
+What would you like to do (add, show, exit)? 
+> show
+Category: lunch
 Name: sushi
 Ingredients: 
 salmon
 rice
 avocado
 
-The meal has been added!
-?[1;31m
-Start test 2?[0m
-Which meal do you want to add (breakfast, lunch, dinner)? 
-> dinner
-Input the meal's name: 
-> salad
-Input the ingredients: 
-> lettuce,tomato,onion,cheese,olives
-Category: DINNER
-Name: salad
-Ingredients: 
-lettuce
-tomato
-onion
-cheese
-olives
-
-The meal has been added!
-?[1;31m
-Start test 3?[0m
-Which meal do you want to add (breakfast, lunch, dinner)? 
-> breakfast
-Input the meal's name: 
-> oatmeal
-Input the ingredients: 
-> oats, milk, banana, peanut butter
-Category: BREAKFAST
-Name: oatmeal
+Category: breakfast
+Name: banana oatmeal
 Ingredients: 
 oats
 milk
 banana
 peanut butter
 
+What would you like to do (add, show, exit)? 
+> exit
+Bye!
+?[1;31m
+Start test 2?[0m
+What would you like to do (add, show, exit)? 
+> add
+Which meal do you want to add (breakfast, lunch, dinner)? 
+> lunch
+Input the meal's name: 
+> sushi
+Input the ingredients: 
+> salmon, rice, avocado
 The meal has been added!
+What would you like to do (add, show, exit)? 
+> show
+Category: lunch
+Name: sushi
+Ingredients: 
+salmon
+rice
+avocado
+
+What would you like to do (add, show, exit)? 
+> exit
+Bye!
+?[1;31m
+Start test 3?[0m
+What would you like to do (add, show, exit)? 
+> add
+Which meal do you want to add (breakfast, lunch, dinner)? 
+> lunch
+Input the meal's name: 
+> sushi
+Input the ingredients: 
+> salmon, rice, avocado
+The meal has been added!
+What would you like to do (add, show, exit)? 
+> add
+Which meal do you want to add (breakfast, lunch, dinner)? 
+> breakfast
+Input the meal's name: 
+> banana oatmeal
+Input the ingredients: 
+> oats, milk, banana, peanut butter
+The meal has been added!
+What would you like to do (add, show, exit)? 
+> show
+Category: lunch
+Name: sushi
+Ingredients: 
+salmon
+rice
+avocado
+
+Category: breakfast
+Name: banana oatmeal
+Ingredients: 
+oats
+milk
+banana
+peanut butter
+
+What would you like to do (add, show, exit)? 
+> exit
+Bye!
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
