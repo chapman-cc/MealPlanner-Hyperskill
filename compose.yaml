@@ -6,6 +6,8 @@ services:
       - .env
     volumes:
       - db_data:/var/lib/postgresql:rw
+    ports:
+      - 5432:5432
   admin:
     image: dpage/pgadmin4:7
     depends_on:
