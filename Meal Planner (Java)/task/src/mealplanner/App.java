@@ -1,5 +1,8 @@
 package mealplanner;
 
+import mealplanner.entities.Meal;
+import mealplanner.io.Input;
+
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;

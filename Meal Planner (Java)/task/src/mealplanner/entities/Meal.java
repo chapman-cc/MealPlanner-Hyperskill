@@ -1,4 +1,4 @@
-package mealplanner;
+package mealplanner.entities;
 
 import java.util.List;
 

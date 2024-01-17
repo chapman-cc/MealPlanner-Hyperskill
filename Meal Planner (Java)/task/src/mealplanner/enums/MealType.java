@@ -1,4 +1,4 @@
-package mealplanner;
+package mealplanner.enums;
 
 @Deprecated
 public enum MealType {
