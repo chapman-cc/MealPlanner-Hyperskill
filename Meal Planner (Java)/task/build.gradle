@@ -3,7 +3,5 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.postgresql:postgresql:42.2.27'
-    implementation 'org.xerial:sqlite-jdbc:3.44.1.0'
-    implementation 'org.slf4j:slf4j-api:2.0.11'
+    implementation 'org.postgresql:postgresql:42.7.1'
 }

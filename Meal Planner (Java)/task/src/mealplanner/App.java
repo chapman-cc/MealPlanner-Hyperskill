@@ -1,38 +1,61 @@
 package mealplanner;
 
+import mealplanner.db.Db;
+import mealplanner.db.Queries;
 import mealplanner.entities.Meal;
+import mealplanner.entities.MealsRepository;
 import mealplanner.io.Input;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 
 public class App {
-    private final Input input = new Input();
-    private final PrintStream out = System.out;
-    private final List<Meal> meals = new ArrayList<>();
+    private final Input input;
+    private final PrintStream out;
+
+    private final MealsRepository mealsRepo;
+
+    public App(Map<String, String> env) throws SQLException {
+        this.input = new Input();
+        this.out = System.out;
+        Connection con = Db.getConnection(env);
+        this.mealsRepo = new MealsRepository(con);
+    }
+
 
     public void run() {
-        while (true) {
-            String menuPrompt = "What would you like to do (add, show, exit)? ";
-            out.println(menuPrompt);
-            String selectedMenu = input.read(Input.verifyAppMenu, menuPrompt);
-            switch (selectedMenu) {
-                case "add" -> addMenuItem();
-                case "show" -> showMenuItems();
-                case "exit" -> {
-                    out.println("Bye!");
-                    return;
+        try {
+            while (true) {
+                String menuPrompt = "What would you like to do (add, show, exit)? ";
+                out.println(menuPrompt);
+                String selectedMenu = input.read(Input.verifyAppMenu, menuPrompt);
+                switch (selectedMenu) {
+                    case "add" -> addMenuItem();
+                    case "show" -> showMenuItems();
+                    case "exit" -> {
+                        out.println("Bye!");
+                        return;
+                    }
                 }
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private void addMenuItem() {
+    private void addMenuItem() throws SQLException {
+        Meal meal = createMeal();
+        if (mealsRepo.addMeal(meal)) {
+            out.println("The meal has been added!");
+        }
+    }
+
+    private Meal createMeal() {
         Meal meal = new Meal();
-
-
         out.println("Which meal do you want to add (breakfast, lunch, dinner)? ");
         String menuType = input.read(Input.verifyMealType, "Wrong meal category! Choose from: breakfast, lunch, dinner.");
         meal.setType(menuType);
@@ -42,22 +65,21 @@ public class App {
         out.println("Input the ingredients: ");
         String ingredientsString = input.read(Input.verifyMealIngredients, "Wrong format. Use letters only!");
         meal.setIngredients(Arrays.stream(ingredientsString.split(",")).map(String::trim).toList());
-
-        meals.add(meal);
-        out.println("The meal has been added!");
+        return meal;
     }
 
-    private void showMenuItems() {
-        if (meals.isEmpty()) {
-            out.println("No meals saved. Add a meal first.");
-        } else {
-            meals.stream()
-                    .map(Meal::createPrintRecord)
-                    .forEach(out::println);
+    private void showMenuItems() throws SQLException {
+        for (Meal meal : mealsRepo.getMeals()) {
+            out.println(meal.createPrintRecord());
         }
     }
 
     public void close() {
-        input.close();
+        try {
+            input.close();
+            Db.closeConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

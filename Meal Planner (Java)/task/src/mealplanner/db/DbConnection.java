@@ -1,6 +1,6 @@
 package mealplanner.db;
 
-import org.sqlite.SQLiteDataSource;
+
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -33,18 +33,18 @@ public class DbConnection {
         return null;
     }
 
-    public static Connection makeHyperSkillConnection(String url) {
-        SQLiteDataSource dataSource = new SQLiteDataSource();
-        dataSource.setUrl(url);
-        try (Connection con = dataSource.getConnection()) {
-            if (con.isValid(5)) {
-                System.out.println("Connection is valid");
-                return con;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace(System.out);
-        }
-
-        return null;
-    }
+//    public static Connection makeHyperSkillConnection(String url) {
+//        SQLiteDataSource dataSource = new SQLiteDataSource();
+//        dataSource.setUrl(url);
+//        try (Connection con = dataSource.getConnection()) {
+//            if (con.isValid(5)) {
+//                System.out.println("Connection is valid");
+//                return con;
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace(System.out);
+//        }
+//
+//        return null;
+//    }
 }

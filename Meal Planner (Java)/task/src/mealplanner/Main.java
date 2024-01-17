@@ -1,12 +1,17 @@
 package mealplanner;
 
+import java.sql.SQLException;
+
 public class Main {
     public static void main(String[] args) {
-        App app = new App();
+        App app = null;
         try {
+            app = new App(System.getenv());
             app.run();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         } finally {
-            app.close();
+            if (app != null) app.close();
         }
     }
 }

@@ -1,6 +1,8 @@
 package mealplanner.entities;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Meal {
     private String type;
@@ -8,7 +10,13 @@ public class Meal {
     private List<String> ingredients;
 
     public Meal() {
-        this("", "", List.of());
+        this.type = "";
+        this.name = "";
+        this.ingredients = new ArrayList<>();
+    }
+
+    public Meal(String type, String name) {
+        this(type, name, new ArrayList<>());
     }
 
     public Meal(String type, String name, List<String> ingredients) {
@@ -40,6 +48,9 @@ public class Meal {
     public void setIngredients(List<String> ingredients) {
         this.ingredients = ingredients;
     }
+    public void addIngredient(String ingredient) {
+        ingredients.add(ingredient);
+    }
 
     public String createPrintRecord() {
         StringBuilder sb = new StringBuilder();
@@ -49,5 +60,18 @@ public class Meal {
                 .append("Ingredients: ").append("\n");
         ingredients.forEach(ingredient -> sb.append(ingredient).append("\n"));
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Meal meal = (Meal) object;
+        return Objects.equals(type, meal.type) && Objects.equals(name, meal.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, name);
     }
 }
