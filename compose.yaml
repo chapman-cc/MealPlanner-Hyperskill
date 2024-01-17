@@ -1,3 +1,5 @@
+#Please use example.env as a template and key in env_files
+
 services:
   db:
     image: postgres:14.10-alpine
