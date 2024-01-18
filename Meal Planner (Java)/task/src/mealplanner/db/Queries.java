@@ -14,6 +14,13 @@ public class Queries {
                 meal_id INTEGER
             )""";
     public static String mealQuery = "SELECT * FROM meals";
+    public static String mealQueryByCategory = "SELECT * FROM meals WHERE category = ?";
+
+    public static String mealQuery2 = """
+                SELECT * FROM meals as m
+                JOIN ingredients as i ON m.meal_id = i.meal_id
+                GROUP BY m.meal
+                ORDER BY i.ingredient_id""";
     public static String ingredientQuery = "SELECT * FROM ingredients WHERE meal_id = ?";
 
     /*
@@ -32,4 +39,8 @@ public class Queries {
      * */
     public static String insertIngredientQuery = "INSERT INTO ingredients (ingredient, ingredient_id, meal_id) VALUES (?, ?, ?)";
 
+//    SELECT *
+//    FROM meals as m
+//    JOIN ingredients as i ON m.meal_id = i.meal_id
+//    ORDER BY i.ingredient_id
 }
