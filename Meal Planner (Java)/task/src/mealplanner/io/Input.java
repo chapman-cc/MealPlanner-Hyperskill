@@ -1,4 +1,4 @@
-package mealplanner;
+package mealplanner.io;
 
 import java.util.Arrays;
 import java.util.InputMismatchException;
@@ -31,6 +31,16 @@ public class Input {
 
     public String read() {
         return read(string -> defaultPattern.matcher(string).matches(), "");
+    }
+
+    public String read(String regex, String errorMsg) {
+        Pattern pattern = Pattern.compile(regex);
+        Predicate<String> stringPredicate = string -> pattern.matcher(string).matches();
+        return read(stringPredicate, errorMsg);
+    }
+
+    public String read(Pattern pattern, String errorMsg) {
+        return read(string -> pattern.matcher(string).matches(), errorMsg);
     }
 
     public String read(Predicate<String> predicate, String errorMsg) {
