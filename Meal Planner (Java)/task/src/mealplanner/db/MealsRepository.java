@@ -1,14 +1,14 @@
-package mealplanner.entities;
+package mealplanner.db;
 
-import mealplanner.db.Queries;
+import mealplanner.entities.Meal;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MealsRepository {
-    private List<Meal> meals;
-    private Connection con;
+    private final List<Meal> meals;
+    private final Connection con;
 
     public MealsRepository(Connection connection) throws SQLException {
         this.meals = new ArrayList<>();
@@ -27,20 +27,22 @@ public class MealsRepository {
             stmt.executeUpdate(Queries.ingredientSchema);
         }
     }
+
     private void loadMeals() throws SQLException {
         try (Statement stmt = con.createStatement()) {
             try (ResultSet mealsResult = stmt.executeQuery(Queries.mealQuery)) {
                 while (mealsResult.next()) {
-                    String type = mealsResult.getString("type");
-                    String name = mealsResult.getString("name");
-                    Meal meal = new Meal(type, name);
+                    int id = mealsResult.getInt("meal_id");
+                    String type = mealsResult.getString("category");
+                    String name = mealsResult.getString("meal");
+                    Meal meal = new Meal(id, type, name);
                     meals.add(meal);
 
                     try (PreparedStatement ingredientQueryStmt = con.prepareStatement(Queries.ingredientQuery)) {
                         ingredientQueryStmt.setInt(1, mealsResult.getInt("meal_id"));
                         try (ResultSet ingredientsResult = ingredientQueryStmt.executeQuery()) {
                             while (ingredientsResult.next()) {
-                                String ingredient = ingredientsResult.getString("name");
+                                String ingredient = ingredientsResult.getString("ingredient");
                                 meal.addIngredient(ingredient);
                             }
                         }

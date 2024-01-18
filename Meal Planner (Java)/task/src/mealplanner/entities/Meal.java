@@ -5,17 +5,19 @@ import java.util.List;
 import java.util.Objects;
 
 public class Meal {
+    private int id;
     private String type;
     private String name;
     private List<String> ingredients;
 
     public Meal() {
+        this.id = -1;
         this.type = "";
         this.name = "";
         this.ingredients = new ArrayList<>();
     }
 
-    public Meal(String type, String name) {
+    public Meal(int id , String type, String name) {
         this(type, name, new ArrayList<>());
     }
 
@@ -23,6 +25,14 @@ public class Meal {
         this.type = type;
         this.name = name;
         this.ingredients = ingredients;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getType() {

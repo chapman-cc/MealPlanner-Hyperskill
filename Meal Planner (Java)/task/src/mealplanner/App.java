@@ -1,15 +1,12 @@
 package mealplanner;
 
 import mealplanner.db.Db;
-import mealplanner.db.Queries;
 import mealplanner.entities.Meal;
-import mealplanner.entities.MealsRepository;
+import mealplanner.db.MealsRepository;
 import mealplanner.io.Input;
 
 import java.io.PrintStream;
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -22,8 +19,7 @@ public class App {
     public App(Map<String, String> env) throws SQLException {
         this.input = new Input();
         this.out = System.out;
-        Connection con = Db.getConnection(env);
-        this.mealsRepo = new MealsRepository(con);
+        this.mealsRepo = new MealsRepository(Db.getConnection(env));
     }
 
 
