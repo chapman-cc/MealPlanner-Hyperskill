@@ -1,25 +1,35 @@
 package mealplanner;
 
+import mealplanner.dao.IngredientDao;
+import mealplanner.dao.MealDao;
 import mealplanner.db.Db;
+import mealplanner.entities.Ingredient;
 import mealplanner.entities.Meal;
-import mealplanner.db.MealsRepository;
 import mealplanner.io.Input;
 
 import java.io.PrintStream;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 public class App {
     private final Input input;
     private final PrintStream out;
 
-    private final MealsRepository mealsRepo;
+    //    private final MealsRepository mealsRepo;
+    private final MealDao mealsDao;
+    private final IngredientDao ingredientDao;
 
     public App(Map<String, String> env) throws SQLException {
+        Connection connection = Db.getConnection(env);
         this.input = new Input();
         this.out = System.out;
-        this.mealsRepo = new MealsRepository(Db.getConnection(env));
+        this.mealsDao = new MealDao(connection);
+        this.ingredientDao = new IngredientDao(connection);
+        this.mealsDao.createTable();
+        this.ingredientDao.createTable();
     }
 
 
@@ -44,10 +54,11 @@ public class App {
     }
 
     private void addMenuItem() throws SQLException {
+//        TODO: check if recipe of same name exist
         Meal meal = createMeal();
-        if (mealsRepo.addMeal(meal)) {
-            out.println("The meal has been added!");
-        }
+        int mealId = mealsDao.add(meal);
+        meal.getIngredients().forEach(ingredient -> ingredient.setMealId(mealId));
+        ingredientDao.addAll(meal.getIngredients().toArray(new Ingredient[0]));
     }
 
     private Meal createMeal() {
@@ -60,20 +71,30 @@ public class App {
         meal.setMeal(name);
         out.println("Input the ingredients: ");
         String ingredientsString = input.read(Input.verifyMealIngredients, "Wrong format. Use letters only!");
-        meal.setIngredients(Arrays.stream(ingredientsString.split(",")).map(String::trim).toList());
+        List<Ingredient> list = Arrays.stream(ingredientsString
+                        .split(","))
+                        .map(String::trim)
+                        .map(string -> new Ingredient(string, meal.getId()))
+                        .toList();
+        meal.setIngredients(list);
         return meal;
     }
 
     private void showMenuItems() throws SQLException {
         out.println("Which category do you want to print (breakfast, lunch, dinner)?");
         String mealType = input.read(Input.verifyMealType, "Wrong meal category! Choose from: breakfast, lunch, dinner.");
-        mealsRepo.loadMeals(mealType);
-        if (mealsRepo.getMeals().isEmpty()) {
+        List<Meal> meals = mealsDao.getByCategory(mealType);
+        if (meals.isEmpty()) {
             out.println("No meals found.");
             return;
         }
+        for (Meal meal : meals) {
+            List<Ingredient> ingredients = ingredientDao.getByMeal(meal.getId());
+            meal.setIngredients(ingredients);
+        }
+
         out.printf("Category: %s%n", mealType);
-        for (Meal meal : mealsRepo.getMeals()) {
+        for (Meal meal : meals) {
             out.println(meal.createPrintRecord());
         }
     }
