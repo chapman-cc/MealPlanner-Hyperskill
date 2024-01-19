@@ -26,7 +26,7 @@ public class MealDao implements Dao<Meal> {
     }
 
     public void createTable() {
-        try (Statement stmt = con.createStatement();) {
+        try (Statement stmt = con.createStatement()) {
             stmt.execute(createTableQuery);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -58,9 +58,9 @@ public class MealDao implements Dao<Meal> {
     public Meal get(int id) {
         try (
                 PreparedStatement stmt = con.prepareStatement(selectByIdQuery);
-                ResultSet found = stmt.executeQuery();
+                ResultSet found = stmt.executeQuery()
         ) {
-            while (found.next()) {
+            if (found.next()) {
                 return new Meal(found.getInt("id"), found.getString("category"), found.getString("meal"));
             }
         } catch (SQLException e) {
@@ -120,7 +120,7 @@ public class MealDao implements Dao<Meal> {
 
     @Override
     public void delete(Meal meal) {
-        try (PreparedStatement stmt = con.prepareStatement(deleteQuery);) {
+        try (PreparedStatement stmt = con.prepareStatement(deleteQuery)) {
             stmt.setInt(1, meal.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {

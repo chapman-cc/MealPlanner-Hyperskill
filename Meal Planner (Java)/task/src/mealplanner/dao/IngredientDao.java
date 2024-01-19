@@ -1,7 +1,6 @@
 package mealplanner.dao;
 
 import mealplanner.entities.Ingredient;
-import org.postgresql.core.SqlCommand;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -27,12 +26,10 @@ public class IngredientDao implements Dao<Ingredient> {
     }
 
     public void createTable() {
-        try (Statement stmt = con.createStatement();) {
+        try (Statement stmt = con.createStatement()) {
             stmt.execute(createTableQuery);
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -48,7 +45,7 @@ public class IngredientDao implements Dao<Ingredient> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         }
         return -1;
     }
@@ -62,7 +59,7 @@ public class IngredientDao implements Dao<Ingredient> {
             }
             stmt.executeBatch();
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         }
     }
 
@@ -70,9 +67,9 @@ public class IngredientDao implements Dao<Ingredient> {
     public Ingredient get(int id) {
         try (
                 PreparedStatement stmt = con.prepareStatement(selectByIdQuery);
-                ResultSet found = stmt.executeQuery();
+                ResultSet found = stmt.executeQuery()
         ) {
-            while (found.next()) {
+            if (found.next()) {
                 return new Ingredient(
                         found.getInt("id"),
                         found.getString("ingredient"),
@@ -80,14 +77,14 @@ public class IngredientDao implements Dao<Ingredient> {
                 );
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         }
         return null;
     }
 
     public List<Ingredient> getByMeal(int id) {
         List<Ingredient> ingredients = new ArrayList<>();
-        try (PreparedStatement stmt = con.prepareStatement(selectByMealIdQuery);) {
+        try (PreparedStatement stmt = con.prepareStatement(selectByMealIdQuery)) {
             stmt.setInt(1, id);
             try (ResultSet found = stmt.executeQuery()) {
                 while (found.next()) {
@@ -100,7 +97,7 @@ public class IngredientDao implements Dao<Ingredient> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         }
         return ingredients;  //To change body of created methods use File | Settings | File Templates.
     }
@@ -110,7 +107,7 @@ public class IngredientDao implements Dao<Ingredient> {
         List<Ingredient> ingredients = new ArrayList<>();
         try (
                 PreparedStatement stmt = con.prepareStatement(selectQuery);
-                ResultSet found = stmt.executeQuery();
+                ResultSet found = stmt.executeQuery()
         ) {
             while (found.next()) {
                 Ingredient ingredient = new Ingredient(
@@ -121,7 +118,7 @@ public class IngredientDao implements Dao<Ingredient> {
                 ingredients.add(ingredient);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.err);
 
         }
         return ingredients;
@@ -135,17 +132,17 @@ public class IngredientDao implements Dao<Ingredient> {
             stmt.setInt(3, ingredient.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         }
     }
 
     @Override
     public void delete(Ingredient ingredient) {
-        try (PreparedStatement stmt = con.prepareStatement(deleteQuery);) {
+        try (PreparedStatement stmt = con.prepareStatement(deleteQuery)) {
             stmt.setInt(1, ingredient.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         }
     }
 }

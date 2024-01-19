@@ -17,8 +17,6 @@ import java.util.Map;
 public class App {
     private final Input input;
     private final PrintStream out;
-
-    //    private final MealsRepository mealsRepo;
     private final MealDao mealsDao;
     private final IngredientDao ingredientDao;
 
