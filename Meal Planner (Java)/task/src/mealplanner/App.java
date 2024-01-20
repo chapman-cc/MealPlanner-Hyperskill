@@ -9,14 +9,25 @@ import mealplanner.entities.MealDayPlan;
 import mealplanner.entities.MealWeekPlan;
 import mealplanner.io.Input;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class App {
+    public static enum Command {
+        ADD, SHOW, PLAN, SAVE, EXIT;
+
+        public static String formattedPrint() {
+            return Arrays.stream(values()).map(Enum::name).map(String::toLowerCase).collect(Collectors.joining(", "));
+        }
+    }
+
     private final Input input;
     private final PrintStream out;
     private final MealDao mealsDao;
@@ -64,14 +75,16 @@ public class App {
     public void run() {
         try {
             while (true) {
-                String menuPrompt = "What would you like to do (add, show, plan, exit)? ";
+                String menuPrompt = "What would you like to do (%s)? ".formatted(Command.formattedPrint());
                 out.println(menuPrompt);
                 String selectedMenu = input.read(Input.verifyAppMenu, menuPrompt);
-                switch (selectedMenu) {
-                    case "add" -> addMenuItem();
-                    case "show" -> showMenuItems();
-                    case "plan" -> planMenu();
-                    case "exit" -> {
+
+                switch (Command.valueOf(selectedMenu.toUpperCase())) {
+                    case ADD -> addMenuItem();
+                    case SHOW -> showMenuItems();
+                    case PLAN -> planMenu();
+                    case SAVE -> savePlan();
+                    case EXIT -> {
                         out.println("Bye!");
                         return;
                     }
@@ -91,7 +104,7 @@ public class App {
 
     private Meal createMeal() {
         Meal meal = new Meal();
-        String mealTypeString = Arrays.stream(MealDayPlan.MealType.values()).map(Enum::name).map(String::toLowerCase).reduce("", (partial, string) -> partial.isBlank() ? string: "%s, %s".formatted(partial, string));
+        String mealTypeString = Arrays.stream(MealDayPlan.MealType.values()).map(Enum::name).map(String::toLowerCase).reduce("", (partial, string) -> partial.isBlank() ? string : "%s, %s".formatted(partial, string));
         out.println("Which meal do you want to add (" + mealTypeString + ")? ");
         String menuType = input.read(Input.verifyMealType, "Wrong meal category! Choose from: " + mealTypeString + ".");
         meal.setCategory(menuType);
@@ -100,10 +113,7 @@ public class App {
         meal.setMeal(name);
         out.println("Input the ingredients: ");
         String ingredientsString = input.read(Input.verifyMealIngredients, "Wrong format. Use letters only!");
-        List<Ingredient> list = Arrays.stream(ingredientsString.split(","))
-                .map(String::trim)
-                .map(string -> new Ingredient(string, meal.getId()))
-                .toList();
+        List<Ingredient> list = Arrays.stream(ingredientsString.split(",")).map(String::trim).map(string -> new Ingredient(string, meal.getId())).toList();
         meal.setIngredients(list);
         return meal;
     }
@@ -137,10 +147,7 @@ public class App {
                 out.println(sb);
                 out.printf("Choose the %s for %s from the list above:%n", mealTypeName, dayPlan.getCapitalizedDay());
                 String selectedMeal = input.read(mealNames::contains, "This meal doesn’t exist. Choose a meal from the list above.");
-                meals.stream()
-                        .filter(meal -> meal.getMeal().equals(selectedMeal))
-                        .findFirst()
-                        .ifPresent(meal -> dayPlan.setMeal(mealType, meal));
+                meals.stream().filter(meal -> meal.getMeal().equals(selectedMeal)).findFirst().ifPresent(meal -> dayPlan.setMeal(mealType, meal));
                 sb.setLength(0);
             }
             if (dayPlan.isFull()) {
@@ -153,7 +160,28 @@ public class App {
         }
 
         planDao.add(mealPlan);
+    }
 
+    public void savePlan() {
+        List<Meal> meals = planDao.get().getPlan().values().stream().flatMap(dp -> dp.getPlan().values().stream()).toList();
+
+        List<String> list = planDao.getShoppingList();
+        if (list.isEmpty()) {
+            out.println("Unable to save. Plan your meals first.");
+            return;
+        }
+        out.println("Input a filename:");
+        String fileName = input.read();
+
+        try (FileWriter writer = new FileWriter(fileName, true)) {
+            for (String line : list) {
+                writer.write(line);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        out.println("Saved!");
     }
 
     public void close() {
