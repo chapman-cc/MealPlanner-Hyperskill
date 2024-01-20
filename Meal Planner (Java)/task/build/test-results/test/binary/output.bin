@@ -1,12 +1,21 @@
 [1;31m
 Start test 1[0m
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
+> save
+'Unable to save. Plan your meals first.
+:What would you like to do (add, show, plan, save, exit)? 
 > exit
 Bye!
 Connection closed
 [1;31m
 Start test 2[0m
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
+> exit
+Bye!
+Connection closed
+[1;31m
+Start test 3[0m
+:What would you like to do (add, show, plan, save, exit)? 
 > add
 ;Which meal do you want to add (breakfast, lunch, dinner)? 
 > lunch
@@ -15,7 +24,7 @@
 Input the ingredients: 
 > salmon, rice, avocado
 The meal has been added!
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
 > add
 ;Which meal do you want to add (breakfast, lunch, dinner)? 
 > lunch
@@ -24,7 +33,7 @@
 Input the ingredients: 
 > eggs, milk, cheese
 The meal has been added!
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
 > add
 ;Which meal do you want to add (breakfast, lunch, dinner)? 
 > breakfast
@@ -34,7 +43,7 @@
 Input the ingredients: 
 $> oats, milk, banana, peanut butter
 The meal has been added!
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
 > show
 @Which category do you want to print (breakfast, lunch, dinner)?
 > lunch
@@ -51,7 +60,7 @@
 milk
 cheese
 
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
 > show
 @Which category do you want to print (breakfast, lunch, dinner)?
 > breakfast
@@ -63,13 +72,13 @@
 banana
 peanut butter
 
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
 > exit
 Bye!
 Connection closed
 [1;31m
-Start test 3[0m
-4What would you like to do (add, show, plan, exit)? 
+Start test 4[0m
+:What would you like to do (add, show, plan, save, exit)? 
 > show
 @Which category do you want to print (breakfast, lunch, dinner)?
 > lunch
@@ -86,7 +95,7 @@
 milk
 cheese
 
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
 > show
 @Which category do you want to print (breakfast, lunch, dinner)?
 > breakfast
@@ -98,20 +107,20 @@
 banana
 peanut butter
 
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
 > show
 @Which category do you want to print (breakfast, lunch, dinner)?
 	> brunch
 <Wrong meal category! Choose from: breakfast, lunch, dinner.
 	> dinner
 No meals found.
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
 > exit
 Bye!
 Connection closed
 [1;31m
-Start test 4[0m
-4What would you like to do (add, show, plan, exit)? 
+Start test 5[0m
+:What would you like to do (add, show, plan, save, exit)? 
 > add
 ;Which meal do you want to add (breakfast, lunch, dinner)? 
 > breakfast
@@ -120,7 +129,7 @@
 Input the ingredients: 
 > eggs,milk,cheese
 The meal has been added!
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
 > add
 ;Which meal do you want to add (breakfast, lunch, dinner)? 
 > breakfast
@@ -129,7 +138,7 @@
 Input the ingredients: 
 > bread,cheese,ham
 The meal has been added!
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
 > add
 ;Which meal do you want to add (breakfast, lunch, dinner)? 
 > breakfast
@@ -139,7 +148,7 @@
 Input the ingredients: 
 !> oats,milk,banana,peanut butter
 The meal has been added!
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
 > add
 ;Which meal do you want to add (breakfast, lunch, dinner)? 
 > breakfast
@@ -148,7 +157,7 @@
 Input the ingredients: 
 %> eggs,sausages,bacon,tomatoes,bread
 The meal has been added!
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
 > add
 ;Which meal do you want to add (breakfast, lunch, dinner)? 
 > lunch
@@ -157,7 +166,7 @@
 Input the ingredients: 
 > salmon,rice,avocado
 The meal has been added!
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
 > add
 ;Which meal do you want to add (breakfast, lunch, dinner)? 
 > lunch
@@ -166,7 +175,7 @@
 Input the ingredients: 
  > chicken,lettuce,tomato,olives
 The meal has been added!
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
 > add
 ;Which meal do you want to add (breakfast, lunch, dinner)? 
 > lunch
@@ -175,7 +184,7 @@
 Input the ingredients: 
 > eggs,milk,cheese
 The meal has been added!
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
 > add
 ;Which meal do you want to add (breakfast, lunch, dinner)? 
 > lunch
@@ -184,7 +193,7 @@
 Input the ingredients: 
 %> lettuce,tomato,onion,cheese,olives
 The meal has been added!
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
 > add
 ;Which meal do you want to add (breakfast, lunch, dinner)? 
 	> dinner
@@ -193,7 +202,7 @@
 Input the ingredients: 
 %> pumpkin,coconut milk,curry,carrots
 The meal has been added!
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
 > add
 ;Which meal do you want to add (breakfast, lunch, dinner)? 
 	> dinner
@@ -202,7 +211,7 @@
 Input the ingredients: 
 > beef steak
 The meal has been added!
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
 > add
 ;Which meal do you want to add (breakfast, lunch, dinner)? 
 	> dinner
@@ -211,7 +220,7 @@
 Input the ingredients: 
 > flour,tomato,cheese,salami
 The meal has been added!
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
 > add
 ;Which meal do you want to add (breakfast, lunch, dinner)? 
 	> dinner
@@ -220,7 +229,7 @@
 Input the ingredients: 
 > tomato,orzo
 The meal has been added!
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
 > plan
 monday
 english breakfast
@@ -464,7 +473,18 @@ Wednesday
 LUNCH: omelette
 DINNER: pizza
 
-4What would you like to do (add, show, plan, exit)? 
+:What would you like to do (add, show, plan, save, exit)? 
+> exit
+Bye!
+Connection closed
+[1;31m
+Start test 6[0m
+:What would you like to do (add, show, plan, save, exit)? 
+> save
+Input a filename:
+> plan.txt
+Saved!
+:What would you like to do (add, show, plan, save, exit)? 
 > exit
 Bye!
 Connection closed

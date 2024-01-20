@@ -1,22 +1,17 @@
 package mealplanner.entities;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MealWeekPlan {
-    //    public static final List<String> days = List.of("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
     public enum Day {
         MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY;
-
-
     }
+
     private int id;
 
     private final Map<Day, MealDayPlan> plan;
+
     public MealWeekPlan() {
         this.plan = new HashMap<>(Arrays.stream(Day.values())
                 .collect(Collectors.toMap(day -> day, MealDayPlan::new)));
@@ -30,8 +25,13 @@ public class MealWeekPlan {
     public void setId(int id) {
         this.id = id;
     }
+
     public Map<Day, MealDayPlan> getPlan() {
         return plan;
+    }
+
+    public boolean isValid() {
+        return plan.values().stream().allMatch(MealDayPlan::isFull);
     }
 
     public List<MealDayPlan> getDayPlansAsList() {
@@ -46,6 +46,7 @@ public class MealWeekPlan {
     public MealDayPlan getDayPlan(Day day) {
         return plan.get(day);
     }
+
     public void setDayPlan(MealDayPlan dayPlan) {
         plan.put(dayPlan.getDay(), dayPlan);
     }

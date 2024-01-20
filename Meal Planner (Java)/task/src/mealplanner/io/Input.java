@@ -1,10 +1,13 @@
 package mealplanner.io;
 
+import mealplanner.App;
+
 import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Input {
 
@@ -57,7 +60,8 @@ public class Input {
         }
     }
 
-    public static Pattern AppMenuRegex = Pattern.compile("\\b(add|show|plan|exit)\\b");
+    public static Pattern AppMenuRegex = Pattern.compile("\\b(%s)\\b".formatted(Arrays.stream(App.Command.values()).map(Enum::name).map(String::toLowerCase).collect(Collectors.joining("|"))
+    ));
     public static Predicate<String> verifyAppMenu = string -> AppMenuRegex.matcher(string).matches();
     public static Pattern MealTypeRegex = Pattern.compile("\\b(breakfast)|(lunch)|(dinner)\\b");
     public static Predicate<String> verifyMealType = string -> MealTypeRegex.matcher(string).matches();

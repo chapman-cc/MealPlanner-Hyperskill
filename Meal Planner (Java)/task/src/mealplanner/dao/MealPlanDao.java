@@ -7,10 +7,11 @@ import mealplanner.entities.MealWeekPlan;
 import mealplanner.entities.MealWeekPlan.Day;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class MealPlanDao implements Dao<MealWeekPlan> {
+public class MealPlanDao  {
 
     private static MealPlanDao instance;
     private final MealDao mealDao;
@@ -37,6 +38,12 @@ public class MealPlanDao implements Dao<MealWeekPlan> {
     public static final String selectByMealTypeQuery = "SELECT * FROM meal_plan WHERE meal_type = ?";
     public static final String selectByDayQuery = "SELECT * FROM meal_plan WHERE day = ?";
     public static final String selectByMealIdAndDayQuery = "SELECT * FROM meal_plan WHERE meal_id = ? AND day = ?";
+    public static final String selectIngredientsAsShoppingList = """
+            SELECT ingredient, count(ingredient) as count
+            	FROM meal_plan as mp
+            	INNER JOIN ingredients as i ON mp.meal_id = i.meal_id
+            	GROUP BY ingredient
+            	ORDER BY ingredient""";
     public static final String updateQuery = "UPDATE meal_plan set meal_id = ?, meal_type = ?, day = ? WHERE id = ?";
     public static final String deleteQuery = "DELETE FROM meal_plan WHERE id = ?";
     public static final String deleteAllQuery = "DELETE FROM meal_plan";
@@ -55,7 +62,6 @@ public class MealPlanDao implements Dao<MealWeekPlan> {
         }
     }
 
-    @Override
     public void add(MealWeekPlan mealPlan) {
         deleteAll();
         try (PreparedStatement stmt = con.prepareStatement(insertQuery)) {
@@ -75,15 +81,15 @@ public class MealPlanDao implements Dao<MealWeekPlan> {
         }
     }
 
-    @Override
-    public MealWeekPlan get(int id) {
+    public MealWeekPlan get() {
         MealWeekPlan mealPlan = new MealWeekPlan();
         try (Statement stmt = con.createStatement()) {
             ResultSet found = stmt.executeQuery(selectQuery);
-            if (found.next()) {
-                int mealId = found.getInt(2);
-                MealType type = MealType.valueOf(found.getString(3));
-                Day day = Day.valueOf(found.getString(4));
+            while (found.next()) {
+
+                int mealId = found.getInt("meal_id");
+                MealType type = MealType.valueOf(found.getString("meal_type"));
+                Day day = Day.valueOf(found.getString("day"));
                 Meal meal = mealDao.get(mealId);
                 MealDayPlan dayPlan = mealPlan.getDayPlan(day);
                 dayPlan.setMeal(type, meal);
@@ -93,23 +99,27 @@ public class MealPlanDao implements Dao<MealWeekPlan> {
         }
         return mealPlan;
     }
-
-    @Override
-    public List<MealWeekPlan> getAll() {
-        return List.of();
+    public List<String> getShoppingList(){
+        List<String> lines = new ArrayList<>();
+        try (Statement stmt = con.createStatement()) {
+            ResultSet found = stmt.executeQuery(selectIngredientsAsShoppingList);
+            while (found.next()) {
+               String ingredient =found.getString("ingredient");
+                int count = found.getInt("count");
+                if (count > 1) {
+                    lines.add("%s x%d%n".formatted(ingredient, count));
+                } else {
+                    lines.add("%s%n".formatted(ingredient));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        }
+        return lines;
     }
 
-    @Override
-    public void update(MealWeekPlan mealPlan) {
-
-    }
 
     public void deleteAll() {
-
-    }
-
-    @Override
-    public void delete(MealWeekPlan mealPlan) {
         try (Statement stmt = con.createStatement()) {
             stmt.execute(deleteAllQuery);
         } catch (SQLException e) {

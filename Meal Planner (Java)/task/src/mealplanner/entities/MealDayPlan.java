@@ -1,6 +1,8 @@
 package mealplanner.entities;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MealDayPlan {
@@ -27,13 +29,16 @@ public class MealDayPlan {
     public MealWeekPlan.Day getDay() {
         return day;
     }
+    public List<Meal> getMeals() {
+        return new ArrayList<>(plan.values());
+    }
 
     public boolean isEmpty() {
         return plan.isEmpty();
     }
 
     public boolean isFull() {
-        return plan.keySet().size() == 3;
+        return plan.values().size() == 3;
     }
 
     public String getCapitalizedDay() {

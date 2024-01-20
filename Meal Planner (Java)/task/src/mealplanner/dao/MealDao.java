@@ -70,16 +70,16 @@ public class MealDao implements Dao<Meal> {
 
     @Override
     public Meal get(int id) {
-        try (
-                PreparedStatement stmt = con.prepareStatement(selectByIdQuery);
-                ResultSet found = stmt.executeQuery()
-        ) {
-            if (found.next()) {
-                int idRef = found.getInt("id");
-                String type = found.getString("category");
-                String name = found.getString("meal");
-                List<Ingredient> ingredients = ingredientDao.getByMeal(idRef);
-                return new Meal(idRef, type, name, ingredients);
+        try (PreparedStatement stmt = con.prepareStatement(selectByIdQuery)) {
+            stmt.setInt(1, id);
+            try (ResultSet found = stmt.executeQuery()) {
+                if (found.next()) {
+                    int idRef = found.getInt("id");
+                    String type = found.getString("category");
+                    String name = found.getString("meal");
+                    List<Ingredient> ingredients = ingredientDao.getByMeal(idRef);
+                    return new Meal(idRef, type, name, ingredients);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
