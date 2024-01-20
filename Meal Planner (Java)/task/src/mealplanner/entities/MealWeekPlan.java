@@ -1,5 +1,6 @@
 package mealplanner.entities;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -29,9 +30,17 @@ public class MealWeekPlan {
     public void setId(int id) {
         this.id = id;
     }
+    public Map<Day, MealDayPlan> getPlan() {
+        return plan;
+    }
 
-    public List<MealDayPlan> getDayPlans() {
-        return plan.values().stream().toList();
+    public List<MealDayPlan> getDayPlansAsList() {
+        List<MealDayPlan> list = new ArrayList<>(plan.values().size());
+        for (Day day : Day.values()) {
+            MealDayPlan plan = this.plan.get(day);
+            list.add(plan);
+        }
+        return list;
     }
 
     public MealDayPlan getDayPlan(Day day) {

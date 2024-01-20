@@ -43,8 +43,9 @@ public class MealDayPlan {
     public String getFormattedPrint() {
         StringBuilder sb = new StringBuilder();
         sb.append(getCapitalizedDay()).append("\n");
-        for (var entry : plan.entrySet()) {
-            sb.append("%s: %s%n".formatted(entry.getKey().name(), entry.getValue().getMeal()));
+        for (MealType mealType : MealType.values()) {
+            Meal meal = plan.get(mealType);
+            sb.append("%s: %s%n".formatted(mealType.name(), meal.getMeal()));
         }
         return sb.toString();
     }

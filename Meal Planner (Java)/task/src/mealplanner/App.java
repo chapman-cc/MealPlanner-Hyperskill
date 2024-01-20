@@ -86,11 +86,12 @@ public class App {
 //        TODO: check if recipe of same name exist
         Meal meal = createMeal();
         mealsDao.add(meal);
+        out.println("The meal has been added!");
     }
 
     private Meal createMeal() {
         Meal meal = new Meal();
-        String mealTypeString = Arrays.stream(MealDayPlan.MealType.values()).map(Enum::name).map(String::toLowerCase).reduce("", "%s, %s"::formatted);
+        String mealTypeString = Arrays.stream(MealDayPlan.MealType.values()).map(Enum::name).map(String::toLowerCase).reduce("", (partial, string) -> partial.isBlank() ? string: "%s, %s".formatted(partial, string));
         out.println("Which meal do you want to add (" + mealTypeString + ")? ");
         String menuType = input.read(Input.verifyMealType, "Wrong meal category! Choose from: " + mealTypeString + ".");
         meal.setCategory(menuType);
@@ -131,11 +132,11 @@ public class App {
             for (MealDayPlan.MealType mealType : MealDayPlan.MealType.values()) {
                 String mealTypeName = mealType.name().toLowerCase();
                 List<Meal> meals = mealsDao.getByCategory(mealTypeName);
-                List<String> mealNames = meals.stream().map(Meal::getMeal).toList();
+                List<String> mealNames = meals.stream().map(Meal::getMeal).sorted().toList();
                 mealNames.forEach(name -> sb.append(name).append("\n"));
                 out.println(sb);
                 out.printf("Choose the %s for %s from the list above:%n", mealTypeName, dayPlan.getCapitalizedDay());
-                String selectedMeal = input.read(mealNames::contains, "This meal doesn't exist. Choose a meal from the list above.");
+                String selectedMeal = input.read(mealNames::contains, "This meal doesn’t exist. Choose a meal from the list above.");
                 meals.stream()
                         .filter(meal -> meal.getMeal().equals(selectedMeal))
                         .findFirst()
@@ -143,11 +144,11 @@ public class App {
                 sb.setLength(0);
             }
             if (dayPlan.isFull()) {
-                out.printf("Yeah! We planned the meals for %s%n.%n", dayPlan.getCapitalizedDay());
+                out.printf("Yeah! We planned the meals for %s.%n", dayPlan.getCapitalizedDay());
             }
         }
 
-        for (MealDayPlan dayPlan : mealPlan.getDayPlans()) {
+        for (MealDayPlan dayPlan : mealPlan.getDayPlansAsList()) {
             out.println(dayPlan.getFormattedPrint());
         }
 

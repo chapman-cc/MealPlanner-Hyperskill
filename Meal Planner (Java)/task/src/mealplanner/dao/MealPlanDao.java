@@ -24,10 +24,10 @@ public class MealPlanDao implements Dao<MealWeekPlan> {
 
     public static final String createTableQuery = """
             CREATE TABLE IF NOT EXISTS meal_plan (
-                id SERIAL NOT NULL,
-                meal_id integer NOT NULL,
-                meal_type text NOT NULL,
-                day text NOT NULL,
+                id          SERIAL  NOT NULL,
+                meal_id     integer NOT NULL,
+                meal_type   VARCHAR NOT NULL,
+                day         VARCHAR NOT NULL,
                 PRIMARY KEY (id)
             )""";
     public static final String insertQuery = "INSERT INTO meal_plan (meal_id, meal_type, day) VALUES (?, ?, ?)";
@@ -59,7 +59,7 @@ public class MealPlanDao implements Dao<MealWeekPlan> {
     public void add(MealWeekPlan mealPlan) {
         deleteAll();
         try (PreparedStatement stmt = con.prepareStatement(insertQuery)) {
-            for (MealDayPlan dayPlan : mealPlan.getDayPlans()) {
+            for (MealDayPlan dayPlan : mealPlan.getDayPlansAsList()) {
                 String day = dayPlan.getDay().name();
                 for (Map.Entry<MealType, Meal> set : dayPlan.getPlan().entrySet()) {
                     String type = set.getKey().name();

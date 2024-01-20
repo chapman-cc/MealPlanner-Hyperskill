@@ -20,8 +20,9 @@ public class MealDao implements Dao<Meal> {
     public static final String createTableQuery = """
             CREATE TABLE IF NOT EXISTS meals (
                 id          SERIAL      PRIMARY KEY,
-                category    TEXT        NOT NULL,
-                meal        TEXT        NOT NULL
+                category    VARCHAR     NOT NULL,
+                meal        VARCHAR     NOT NULL,
+                meal_id     INTEGER
             )""";
     public static final String insertQuery = "INSERT INTO meals (category, meal) VALUES (?, ?)";
     public static final String selectQuery = "SELECT * FROM meals";

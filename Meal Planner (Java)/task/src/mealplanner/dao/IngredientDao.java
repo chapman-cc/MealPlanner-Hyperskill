@@ -18,16 +18,17 @@ public class IngredientDao implements Dao<Ingredient> {
     }
     public static final String createTableQuery = """
             CREATE TABLE IF NOT EXISTS ingredients (
-                id          SERIAL      PRIMARY KEY,
-                ingredient  TEXT        NOT NULL,
-                meal_id     INTEGER
+                id              SERIAL      PRIMARY KEY,
+                ingredient      VARCHAR        NOT NULL,
+                ingredient_id   INTEGER,
+                meal_id         INTEGER
             )""";
     public static final String insertQuery = "INSERT INTO ingredients (ingredient, meal_id) VALUES (?, ?)";
     public static final String selectQuery = "SELECT * FROM ingredients";
-    public static final String selectByIdQuery = "SELECT * FROM ingredients WHERE id = ? ORDER BY id ASC";
+    public static final String selectByIdQuery = "SELECT * FROM ingredients WHERE ingredient_id = ? ORDER BY ingredient_id ASC";
     public static final String selectByMealIdQuery = "SELECT * FROM ingredients WHERE meal_id = ?";
-    public static final String updateQuery = "UPDATE ingredients set ingredient = ?, meal_id = ? WHERE id = ?";
-    public static final String deleteQuery = "DELETE FROM ingredients WHERE id = ?";
+    public static final String updateQuery = "UPDATE ingredients set ingredient = ?, meal_id = ? WHERE ingredient_id = ?";
+    public static final String deleteQuery = "DELETE FROM ingredients WHERE ingredient_id = ?";
     private final Connection con;
 
     public IngredientDao(Connection connection) {
@@ -74,7 +75,7 @@ public class IngredientDao implements Dao<Ingredient> {
         ) {
             if (found.next()) {
                 return new Ingredient(
-                        found.getInt("id"),
+                        found.getInt("ingredient_id"),
                         found.getString("ingredient"),
                         found.getInt("meal_id")
                 );
@@ -92,7 +93,7 @@ public class IngredientDao implements Dao<Ingredient> {
             try (ResultSet found = stmt.executeQuery()) {
                 while (found.next()) {
                     Ingredient ingredient = new Ingredient(
-                            found.getInt("id"),
+                            found.getInt("ingredient_id"),
                             found.getString("ingredient"),
                             found.getInt("meal_id")
                     );
@@ -114,7 +115,7 @@ public class IngredientDao implements Dao<Ingredient> {
         ) {
             while (found.next()) {
                 Ingredient ingredient = new Ingredient(
-                        found.getInt("id"),
+                        found.getInt("ingredient_id"),
                         found.getString("ingredient"),
                         found.getInt("meal_id")
                 );
