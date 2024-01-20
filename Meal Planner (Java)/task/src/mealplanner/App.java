@@ -54,10 +54,10 @@ public class App {
         Meal meal = new Meal();
         out.println("Which meal do you want to add (breakfast, lunch, dinner)? ");
         String menuType = input.read(Input.verifyMealType, "Wrong meal category! Choose from: breakfast, lunch, dinner.");
-        meal.setCategory(menuType);
+        meal.setType(menuType);
         out.println("Input the meal's name: ");
         String name = input.read(Input.verifyMealName, "Wrong format. Use letters only!");
-        meal.setMeal(name);
+        meal.setName(name);
         out.println("Input the ingredients: ");
         String ingredientsString = input.read(Input.verifyMealIngredients, "Wrong format. Use letters only!");
         meal.setIngredients(Arrays.stream(ingredientsString.split(",")).map(String::trim).toList());
@@ -65,14 +65,6 @@ public class App {
     }
 
     private void showMenuItems() throws SQLException {
-        out.println("Which category do you want to print (breakfast, lunch, dinner)?");
-        String mealType = input.read(Input.verifyMealType, "Wrong meal category! Choose from: breakfast, lunch, dinner.");
-        mealsRepo.loadMeals(mealType);
-        if (mealsRepo.getMeals().isEmpty()) {
-            out.println("No meals found.");
-            return;
-        }
-        out.printf("Category: %s%n", mealType);
         for (Meal meal : mealsRepo.getMeals()) {
             out.println(meal.createPrintRecord());
         }
