@@ -3,7 +3,7 @@ package mealplanner.dao;
 import java.util.List;
 
 public interface Dao<T> {
-    int add(T t);
+    void add(T t);
 
     T get(int id);
 

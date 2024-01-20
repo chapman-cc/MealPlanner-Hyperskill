@@ -1,5 +1,6 @@
 package mealplanner.dao;
 
+import mealplanner.entities.Ingredient;
 import mealplanner.entities.Meal;
 
 import java.sql.*;
@@ -7,6 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MealDao implements Dao<Meal> {
+    private static MealDao instance;
+
+    public static MealDao getInstance(Connection connection) {
+        if (instance == null) {
+            instance = new MealDao(connection);
+        }
+        return instance;
+    }
+
     public static final String createTableQuery = """
             CREATE TABLE IF NOT EXISTS meals (
                 id          SERIAL      PRIMARY KEY,
@@ -20,21 +30,24 @@ public class MealDao implements Dao<Meal> {
     public static final String updateQuery = "UPDATE meals set category = ?, meal = ? WHERE id = ?";
     public static final String deleteQuery = "DELETE FROM meals WHERE id = ?";
     private final Connection con;
+    private final IngredientDao ingredientDao;
 
     public MealDao(Connection connection) {
         this.con = connection;
+        this.ingredientDao = IngredientDao.getInstance(connection);
     }
 
     public void createTable() {
         try (Statement stmt = con.createStatement()) {
             stmt.execute(createTableQuery);
+            ingredientDao.createTable();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public int add(Meal meal) {
+    public void add(Meal meal) {
         try (PreparedStatement stmt = con.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, meal.getCategory());
             stmt.setString(2, meal.getMeal());
@@ -45,13 +58,13 @@ public class MealDao implements Dao<Meal> {
             }
             try (ResultSet keys = stmt.getGeneratedKeys()) {
                 if (keys.next()) {
-                    return keys.getInt(1);
+                    meal.setId(keys.getInt(1));
+                    ingredientDao.addAll(meal.getIngredients().toArray(new Ingredient[0]));
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
-        return -1;
     }
 
     @Override
@@ -61,7 +74,11 @@ public class MealDao implements Dao<Meal> {
                 ResultSet found = stmt.executeQuery()
         ) {
             if (found.next()) {
-                return new Meal(found.getInt("id"), found.getString("category"), found.getString("meal"));
+                int idRef = found.getInt("id");
+                String type = found.getString("category");
+                String name = found.getString("meal");
+                List<Ingredient> ingredients = ingredientDao.getByMeal(idRef);
+                return new Meal(idRef, type, name, ingredients);
             }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
@@ -78,7 +95,11 @@ public class MealDao implements Dao<Meal> {
                 ResultSet found = stmt.executeQuery()
         ) {
             while (found.next()) {
-                Meal meal = new Meal(found.getInt("id"), found.getString("category"), found.getString("meal"));
+                int id = found.getInt("id");
+                String type = found.getString("category");
+                String name = found.getString("meal");
+                List<Ingredient> ingredients = ingredientDao.getByMeal(id);
+                Meal meal = new Meal(id, type, name, ingredients);
                 meals.add(meal);
             }
         } catch (SQLException e) {
@@ -94,7 +115,11 @@ public class MealDao implements Dao<Meal> {
             stmt.setString(1, category);
             try (ResultSet found = stmt.executeQuery()) {
                 while (found.next()) {
-                    Meal meal = new Meal(found.getInt("id"), found.getString("category"), found.getString("meal"));
+                    int id = found.getInt("id");
+                    String type = found.getString("category");
+                    String name = found.getString("meal");
+                    List<Ingredient> ingredients = ingredientDao.getByMeal(id);
+                    Meal meal = new Meal(id, type, name, ingredients);
                     meals.add(meal);
                 }
             }
@@ -112,6 +137,9 @@ public class MealDao implements Dao<Meal> {
             stmt.setString(2, meal.getMeal());
             stmt.setInt(3, meal.getId());
             stmt.executeUpdate();
+            for (Ingredient ingredient : meal.getIngredients()) {
+                ingredientDao.update(ingredient);
+            }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
@@ -123,6 +151,9 @@ public class MealDao implements Dao<Meal> {
         try (PreparedStatement stmt = con.prepareStatement(deleteQuery)) {
             stmt.setInt(1, meal.getId());
             stmt.executeUpdate();
+            for (Ingredient ingredient : meal.getIngredients()) {
+                ingredientDao.delete(ingredient);
+            }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }

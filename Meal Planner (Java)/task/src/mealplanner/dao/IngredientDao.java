@@ -1,5 +1,6 @@
 package mealplanner.dao;
 
+import mealplanner.db.Db;
 import mealplanner.entities.Ingredient;
 
 import java.sql.*;
@@ -7,6 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IngredientDao implements Dao<Ingredient> {
+    private static IngredientDao instance;
+
+    public static IngredientDao getInstance(Connection connection) {
+        if (instance == null) {
+            instance = new IngredientDao(connection);
+        }
+        return instance;
+    }
     public static final String createTableQuery = """
             CREATE TABLE IF NOT EXISTS ingredients (
                 id          SERIAL      PRIMARY KEY,
@@ -34,20 +43,14 @@ public class IngredientDao implements Dao<Ingredient> {
     }
 
     @Override
-    public int add(Ingredient ingredient) {
-        try (PreparedStatement stmt = con.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
+    public void add(Ingredient ingredient) {
+        try (PreparedStatement stmt = con.prepareStatement(insertQuery)) {
             stmt.setString(1, ingredient.getIngredient());
             stmt.setInt(2, ingredient.getMeal_id());
             stmt.executeUpdate();
-            try (ResultSet set = stmt.getGeneratedKeys()) {
-                if (set.next()) {
-                    return set.getInt(1);
-                }
-            }
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         }
-        return -1;
     }
 
     public void addAll(Ingredient... ingredients) {

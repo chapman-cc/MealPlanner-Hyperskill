@@ -57,7 +57,7 @@ public class Input {
         }
     }
 
-    public static Pattern AppMenuRegex = Pattern.compile("\\b(add|show|exit)\\b");
+    public static Pattern AppMenuRegex = Pattern.compile("\\b(add|show|plan|exit)\\b");
     public static Predicate<String> verifyAppMenu = string -> AppMenuRegex.matcher(string).matches();
     public static Pattern MealTypeRegex = Pattern.compile("\\b(breakfast)|(lunch)|(dinner)\\b");
     public static Predicate<String> verifyMealType = string -> MealTypeRegex.matcher(string).matches();

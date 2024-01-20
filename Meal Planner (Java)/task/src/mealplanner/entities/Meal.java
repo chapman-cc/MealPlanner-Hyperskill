@@ -34,6 +34,7 @@ public class Meal {
 
     public void setId(int id) {
         this.id = id;
+        this.ingredients.forEach(ingredient -> ingredient.setMealId(id));
     }
 
     public String getCategory() {
