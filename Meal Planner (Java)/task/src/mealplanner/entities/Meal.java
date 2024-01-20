@@ -8,7 +8,7 @@ public class Meal {
     private int id;
     private String category;
     private String meal;
-    private List<String> ingredients;
+    private List<Ingredient> ingredients;
 
     public Meal() {
         this.id = -1;
@@ -21,7 +21,7 @@ public class Meal {
         this(id, type, name, new ArrayList<>());
     }
 
-    public Meal(int id, String type, String name, List<String> ingredients) {
+    public Meal(int id, String type, String name, List<Ingredient> ingredients) {
         this.id = id;
         this.category = type;
         this.meal = name;
@@ -34,6 +34,7 @@ public class Meal {
 
     public void setId(int id) {
         this.id = id;
+        this.ingredients.forEach(ingredient -> ingredient.setMealId(id));
     }
 
     public String getCategory() {
@@ -52,15 +53,15 @@ public class Meal {
         this.meal = meal;
     }
 
-    public List<String> getIngredients() {
+    public List<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(List<String> ingredients) {
+    public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 
-    public void addIngredient(String ingredient) {
+    public void addIngredient(Ingredient ingredient) {
         ingredients.add(ingredient);
     }
 
@@ -70,7 +71,7 @@ public class Meal {
 //                .append("Category: ").append(category).append("\n")
                 .append("Name: ").append(meal).append("\n")
                 .append("Ingredients: ").append("\n");
-        ingredients.forEach(ingredient -> sb.append(ingredient).append("\n"));
+        ingredients.forEach(ingredient -> sb.append(ingredient.getIngredient()).append("\n"));
         return sb.toString();
     }
 
