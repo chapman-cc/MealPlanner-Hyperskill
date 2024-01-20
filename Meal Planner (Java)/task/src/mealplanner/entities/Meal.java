@@ -6,24 +6,25 @@ import java.util.Objects;
 
 public class Meal {
     private int id;
-    private String type;
-    private String name;
-    private List<String> ingredients;
+    private String category;
+    private String meal;
+    private List<Ingredient> ingredients;
 
     public Meal() {
         this.id = -1;
-        this.type = "";
-        this.name = "";
+        this.category = "";
+        this.meal = "";
         this.ingredients = new ArrayList<>();
     }
 
-    public Meal(int id , String type, String name) {
-        this(type, name, new ArrayList<>());
+    public Meal(int id, String type, String name) {
+        this(id, type, name, new ArrayList<>());
     }
 
-    public Meal(String type, String name, List<String> ingredients) {
-        this.type = type;
-        this.name = name;
+    public Meal(int id, String type, String name, List<Ingredient> ingredients) {
+        this.id = id;
+        this.category = type;
+        this.meal = name;
         this.ingredients = ingredients;
     }
 
@@ -33,42 +34,44 @@ public class Meal {
 
     public void setId(int id) {
         this.id = id;
+        this.ingredients.forEach(ingredient -> ingredient.setMealId(id));
     }
 
-    public String getType() {
-        return type;
+    public String getCategory() {
+        return category;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public String getName() {
-        return name;
+    public String getMeal() {
+        return meal;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMeal(String meal) {
+        this.meal = meal;
     }
 
-    public List<String> getIngredients() {
+    public List<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(List<String> ingredients) {
+    public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
-    public void addIngredient(String ingredient) {
+
+    public void addIngredient(Ingredient ingredient) {
         ingredients.add(ingredient);
     }
 
     public String createPrintRecord() {
         StringBuilder sb = new StringBuilder();
         sb
-                .append("Category: ").append(type).append("\n")
-                .append("Name: ").append(name).append("\n")
+//                .append("Category: ").append(category).append("\n")
+                .append("Name: ").append(meal).append("\n")
                 .append("Ingredients: ").append("\n");
-        ingredients.forEach(ingredient -> sb.append(ingredient).append("\n"));
+        ingredients.forEach(ingredient -> sb.append(ingredient.getIngredient()).append("\n"));
         return sb.toString();
     }
 
@@ -77,11 +80,11 @@ public class Meal {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         Meal meal = (Meal) object;
-        return Objects.equals(type, meal.type) && Objects.equals(name, meal.name);
+        return Objects.equals(category, meal.category) && Objects.equals(this.meal, meal.meal);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, name);
+        return Objects.hash(category, meal);
     }
 }
